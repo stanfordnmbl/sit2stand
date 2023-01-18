@@ -1,0 +1,93 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+  <!-- Primary Page Layout
+       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+    p {
+    font-size: 1.4em;
+    }
+    a.print {
+    width: 10em;
+    height: 2em;
+    font-size: 0.7em;
+    color: #777;
+    }
+    a.print:hover {
+    color: #000;
+    }
+  </style>
+  <div class="section" style="padding-top: 3rem; font-size: 1.2em; padding-bottom: 1em;" id="instructions">
+    <div class="container" style="text-align: left">
+      <h1 class="section-heading" style="text-align: center">Stanford University Consent to Participate in Research</h1>
+
+<p>You are being asked to participate in a research study. The title of the study is:</p>
+<h3 style="text-align: center;">Mobile Health and Wellness Assessment</h3>
+<p>The key information for this study is being provided to you.</p>
+
+      
+      <p><strong>DESCRIPTION:</strong> You will be asked to record and perform a movements. Specifically, you will be instructed to go from a seated position to standing 10 times. You will then be asked to fill out a survey about health and wellbeing. After the survey, you will be asked to review and approve your video for submission. Finally, you will be asked if you are willing to repeat the study one year from now. If you agree, in one year from now, we will send you a reminder email.</p>
+	
+<p><strong>TIME INVOLVEMENT:</strong> Your participation will take approximately 20 minutes.</p>
+
+      <p><strong>RISKS:</strong> There are no anticipated risks in this study beyond the risk of injury when doing any activity. We strongly recommend that another person is with you while performing the exercises to assist in the case of an unexpected injury.</p>
+
+<p><strong>BENEFITS:</strong> You may receive an analysis of your movement at the end of the study. Although you may not receive additional benefit from your participation, others may ultimately benefit from the knowledge obtained in this study. We cannot and do not guarantee or promise that you will receive any benefits from this study.</p>
+
+<p><strong>PAYMENTS:</strong> You will not receive payment for your participation in this study.</p>
+
+<p><strong>CONFIDENTIALITY:</strong> We will keep your email, video, and all the information about you used in this study as confidential as possible. The results of this research study may be presented at scientific or professional meetings or published in scientific journals. Your individual privacy will be maintained in all published and written data resulting from the study. In all videos submitted, your identity will be concealed by blurring your face.</p>
+
+<p><strong>PARTICIPANT'S RIGHTS:</strong> If you have read this form and have decided to participate in this project, please understand your <strong>participation is voluntary and you have the right to withdraw your consent or discontinue participation at any time</strong> without penalty or loss of benefits to which you are otherwise entitled. The alternative is not to participate.</p>
+
+<p><strong>Experimental Subject’s Bill of Rights:</strong></p>
+
+<p>As a research participant you have the following rights.</p>
+
+      <p>These rights include but are not limited to the participant's right to:
+	<ul>
+	  <li>be informed of the nature and purpose of the experiment;
+<li>be given an explanation of the procedures to be followed in the medical experiment, and any drug or device to be utilized;</li>
+<li>be given a description of any attendant discomforts and risks reasonably to be expected;</li>
+<li>be given an explanation of any benefits to the subject reasonably to be expected, if applicable;</li>
+<li>be given a disclosure of any appropriate alternatives, drugs or devices that might be advantageous to the subject, their relative risks and benefits;</li>
+<li>be informed of the avenues of medical treatment, if any available to the subject after the experiment if complications should arise;</li>
+<li>be given an opportunity to ask questions concerning the experiment or the procedures involved;</li>
+<li>be instructed that consent to participate in the medical experiment may be withdrawn at any time and the subject may discontinue participation without prejudice;</li>
+<li>be given a copy of the signed and dated consent form; and</li>
+<li>be given the opportunity to decide to consent or not to consent to a medical experiment without the intervention of any element of force, fraud, deceit, duress, coercion or undue influence on the subject's decision.</li>
+	</ul>
+
+      </p>
+
+<p><strong>CONTACT INFORMATION:</strong></p>
+
+      <p>If you have any questions, concerns or complaints about this research study, its procedures, risks and benefits, or alternative courses of treatment, you should ask the</p>
+
+      <p>Protocol Director, <u>Melissa Boswell</u></p>
+
+      <p>You may contact her now or later at <u>605-721-2547 or boswellm@stanford.edu</u></p>
+
+      <p><strong>Independent Contact:</strong>If you are not satisfied with the manner in which this study is being conducted, or if you have any concerns, complaints, or general questions about the research or your rights as a research study subject, please contact the Stanford Institutional Review Board (IRB) to speak to an informed individual who is independent of the research team at (650)-723-5244 or toll free at 1-866-680-2906. You may also write the Stanford IRB, Stanford University, 1705 El Camino Real, Palo Alto, CA 94306.</p>
+
+<p>Your participation in this research is voluntary, and you will not be penalized or lose benefits if you refuse to participate or decide to stop.</p>
+<p>Signing this document means that the research study, including the above information, has been described to you orally, and that you voluntarily agree to participate.</p>
+
+<p><strong>You may save or print an extra consent form for you to keep.</strong></p>
+
+<p style="text-align: center;"><a class="fa fa-print button print" href="javascript:window.print()"> Print</a></p>
+
+<p><strong>Click on Agree to provide your consent or Disagree to withhold your consent:</strong></p>
+
+<p style="text-align: center; font-size: 2em;"><a class="button button-primary" href="{% url 'readiness' 2 %}">I agree</a> &nbsp; <a class="button button-primary" href="{% url 'index' %}">I disagree</a></p>
+
+    </div>
+  </div>
+
+  
+
+
+
+ 
+
+{% endblock %}

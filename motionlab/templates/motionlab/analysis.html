@@ -1,0 +1,193 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+
+{% get_media_prefix as MEDIA_URL %}
+
+<script>
+function copyToClipboard() {
+  /* Get the text field */
+  var copyText = document.getElementById("link");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("The results link " + copyText.value + "is now copied.\nSave it in a safe place to get access to your results.");
+} 
+</script>
+
+  {% if annotation.status == "done" or annotation.status == "error"  %}
+  {% else %}
+  <div class="section" style="padding-top: 5rem; padding-bottom: 1rem;">
+    <div class="container">
+      <h2>{% if is_example %}Example Assessment Results{% else %}Your {% if annotation.status == "done" or annotation.status == "error"  %} processed{% endif %} video{% endif %}</h2>
+    </div>
+  </div>
+      {% if not is_example %}
+  <div class="section categories" id="analyze" style="padding: 2rem 0;">
+    <div class="container">
+      <h3 class="section-heading">
+	The video is still processing, please visit this site later.
+      </h3>
+    <!--/div>
+  </div>
+  <div class="section" style="padding-top: 5rem; padding-bottom: 1rem;">
+    <div class="container"-->
+      <strong>Copy the URL to view your results{% if annotation.status != "done" and annotation.status != "error"  %} when they are ready{% endif %}:</strong><br />
+      <input type="text" id="link"
+	     style="width: 60%; color: #333333"
+	     readonly value="{% if request.is_secure %}https{% else %}http{% endif %}://sit2stand.ai{{ request.path }}" /><button style="margin-left: 1em;" onclick="copyToClipboard()" class="button button-primary" href="https://stanfordgsb.qualtrics.com/jfe/form/SV_dav6QIzItlYOAaF?video={{ video.slug }}">Copy</button>
+
+      <!--div>Now you can complete your assessment</div>
+	  <a class="button button-primary" style="height: auto; line-break: auto; margin-top: 1em; margin-bottom: 1em;" href="">Continue to survey</a-->
+      
+  <div id="share-buttons" style="margin: 1em;">
+    Share your analysis with friends:<br/>
+    <!-- Email -->
+    <a class="social fa fa-envelope" href="mailto:?Subject=Simple Share Buttons&amp;Body=I%20saw%20this%20and%20thought%20of%20you!%20 {% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{{ request.path }}"></a>
+ 
+    <!-- Facebook -->
+    <a class="social fa fa-facebook" href="http://www.facebook.com/sharer.php?u={% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{{ request.path }}" target="_blank"></a>
+    
+    <!-- LinkedIn -->
+    <a class="social fa fa-linkedin" href="http://www.linkedin.com/shareArticle?url={% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{{ request.path }}" target="_blank"></a>
+    
+    <!-- Pinterest -->
+    <a class="social fa fa-pinterest" href="javascript:void((function()%7Bvar%20e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','http://assets.pinterest.com/js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e)%7D)());"></a>
+    
+    <!-- Twitter -->
+    <a class="social fa fa-twitter" href="https://twitter.com/share?url={% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{{ request.path }}" target="_blank"></a>
+
+  </div>
+  </div>
+  </div>
+  {% endif %}
+  {% endif %}
+  <div class="section" style="padding-top: 5rem; padding-bottom: 1rem;">
+    <div class="container">
+      {% if annotation.status == "done" or annotation.status == "error"  %}<h2>{% if is_example %}Example Assessment Results{% else %}Your {% if annotation.status == "done" or annotation.status == "error"  %} processed{% endif %} video{% endif %}</h2>{% endif %}
+      <div class="row">
+	<div class="one-half column">
+      <h3>Original video</h3>
+      <div class="video-container" style="margin-bottom: 2em; height: 20em;">
+	<video controls style="width: 100%; height: 100%" autoplay loop muted>
+	  <source src="{{ video.file.url }}" type="video/mp4">
+	    Your browser does not support the video tag.
+	</video>
+      </div>
+	</div>
+	<div class="one-half column">
+      <h3>Motion Analysis</h3>
+	  <div class="video-container" style="margin-bottom: 2em; height: 20em;">
+	  {% if annotation.status == "done" or annotation.status == "error"  %}
+	<video controls style="width: 100%; height: 100%" autoplay loop muted>
+	  <source src="{{ annotation.file.url }}" type="video/mp4">
+	    Your browser does not support the video tag.
+	</video>
+	  {% else %}
+	  Processing
+	  {% endif %}
+	  </div>
+	</div>
+      </div>
+  {% if annotation.status == "done" or annotation.status == "error"  %}
+      {% if not is_example %}
+      <strong>Copy the URL to view your results{% if annotation.status != "done" and annotation.status != "error"  %} when they are ready{% endif %}:</strong>
+      <input type="text" id="link"
+	     style="width: 30%; "
+	     readonly value="{% if request.is_secure %}https{% else %}http{% endif %}://sit2stand.ai{{ request.path }}" /><button style="margin-left: 1em;" onclick="copyToClipboard()" class="button" href="https://stanfordgsb.qualtrics.com/jfe/form/SV_dav6QIzItlYOAaF?video={{ video.slug }}">Copy</button>
+
+      <!--div>Now you can complete your assessment</div>
+	  <a class="button button-primary" style="height: auto; line-break: auto; margin-top: 1em; margin-bottom: 1em;" href="">Continue to survey</a-->
+      
+  <div id="share-buttons" style="margin: 1em;">
+    Share your analysis with friends:<br/>
+    <!-- Email -->
+    <a class="social fa fa-envelope" href="mailto:?Subject=Simple Share Buttons&amp;Body=I%20saw%20this%20and%20thought%20of%20you!%20 {% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{{ request.path }}"></a>
+ 
+    <!-- Facebook -->
+    <a class="social fa fa-facebook" href="http://www.facebook.com/sharer.php?u={% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{{ request.path }}" target="_blank"></a>
+    
+    <!-- LinkedIn -->
+    <a class="social fa fa-linkedin" href="http://www.linkedin.com/shareArticle?url={% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{{ request.path }}" target="_blank"></a>
+    
+    <!-- Pinterest -->
+    <a class="social fa fa-pinterest" href="javascript:void((function()%7Bvar%20e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','http://assets.pinterest.com/js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e)%7D)());"></a>
+    
+    <!-- Twitter -->
+    <a class="social fa fa-twitter" href="https://twitter.com/share?url={% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{{ request.path }}" target="_blank"></a>
+
+  </div>
+  {% endif %}
+{% endif %}
+
+    </div>
+  </div>
+
+  {% if annotation.status == "done" or annotation.status == "error"  %}
+  <div class="section categories" id="analyze" style="padding: 2rem 0;">
+    <div class="container">
+      <h3 class="section-heading">
+	{% if annotation.status == "processing" or annotation.status == "submitted" %}
+	The video is still processing, please visit this site later.
+	{% elif annotation.status == "error" %}
+	Processing finished with an error, we are investigating it.
+	{% else %}
+	Your movement analysis
+	{% endif %}
+      </h3>
+      {% if annotation.status == "done" %}
+      <div style="text-align: center">
+	<table style="margin-left:auto; margin-right:auto;">
+	{% for key, value in results.items %}
+	<tr>
+	  <th style="text-align: right;">{{ key }}</th><td>{{ value }}</td>
+	</tr>
+	{% endfor %}
+      </table>
+	<a class="button" href="/analysis/{{ annotation.video.slug }}/json/">Download all metrics</a>
+      </div>
+      {% endif %}
+      <div>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="section" style="padding-top: 5rem; padding-bottom: 1rem;">
+    <div class="container">
+      {% if annotation.status == "done" %}
+    <div class="container" style="padding-bottom: 1.5em;">
+      <div class="one-half column">
+	<img class="u-max-full-width" src="{{ MEDIA_URL }}outputs/{{ annotation.video.slug }}/plots/knee-flex-curves.png" />
+      </div>
+      <div class="one-half column" style="text-align: left">
+<p style="font-weight: bold; margin-bottom: 0.3em;">The angles of your joints</p>
+	These curves show the angle of your left knee when you perform the sit-to-stand test. One curve corresponds to one repetition. The more similar the curves, the more consistent your movement.
+      </div>
+    </div>
+
+    
+
+    {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="section categories" style="padding-top: 3rem; padding-bottom: 0rem;">
+  </div>
+
+
+  <div class="section get-help" id="license" style="text-align: left;padding-bottom: 1em; padding-top: 2em;">
+    <div class="container" style="text-align: center;">
+      <a class="button" href="/">Return to the main page</a>
+    </div>
+  </div>
+
+{% endblock %}

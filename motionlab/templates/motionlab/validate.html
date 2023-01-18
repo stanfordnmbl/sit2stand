@@ -1,0 +1,18 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+  <div class="section" style="padding-top: 5rem; padding-bottom: 1rem;">
+    <div class="container">
+      <h2>Approve your video</h2>
+      <div class="video-container" style="margin-bottom: 2em">
+	<video controls style="width: 100%">
+	  <source src="{{ video.file.url }}" type="video/mp4">
+	    Your browser does not support the video tag.
+	</video>
+      </div>
+    </div>
+    <p style="text-align: center; font-size: 1.8em;"><a class="button button-primary" href="{% url 'form' %}">Retake</a> &nbsp; <a class="button button-primary" href="{% url 'analysis' video.slug %}">Approve and continue to survey</a></p>
+    
+  </div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+    www:
+        image: stanfordnmbl/motionlab
+        ports:
+          - "80:80"
+        env_file:
+          - ".env"
+        depends_on:
+          - redis
+        volumes:
+          - ./data:/code/data
+          - ./keys:/keys
+    # http2https:
+    #     image: http2https
+    #     ports:
+    #       - "80:80"
+    redis:
+        image: redis
+        command: redis-server --requirepass ZXdLkEtzvjsye6
+        ports:
+          - "6379:6379"

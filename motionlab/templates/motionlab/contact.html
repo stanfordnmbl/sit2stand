@@ -1,0 +1,26 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block navbar %}
+<li class="navbar-item"><a class="navbar-link" href="javascript:history.go(-1)"><i class="fa fa-arrow-left" style="background: none; color: inherit; line-height: inherit; margin: 0; font-size: inherit; padding: inherit; padding-right: 0.2em;"></i> Back to the study</a></li>
+{% endblock %}
+{% block content %}
+  <!-- Primary Page Layout
+       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+  <div class="section" id="analyze">
+    <div class="container">
+	<!-- templates/email.html -->
+	<h1>Contact Us</h1>
+	<form method="post">
+	  {% csrf_token %}
+	  {{ form.as_p }}
+	  <div class="form-actions">
+	    <button type="submit">Send</button>
+	  </div>
+	</form>
+      </form>
+      <!--img class="u-max-full-width" src="{% static "images/placeholder.png" %}"-->
+    </div>
+  </div>
+
+{% endblock %}

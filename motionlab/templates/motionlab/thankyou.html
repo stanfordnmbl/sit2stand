@@ -1,0 +1,22 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+  <!-- Primary Page Layout
+       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+    p {
+    font-size: 1.4em;
+    }
+  </style>
+  <div class="section" style="padding-top: 3rem; font-size: 1.2em; padding-bottom: 1em;" id="instructions">
+    <div class="container" style="text-align: left">
+      <h2 class="section-heading" style="text-align: center">Thank you</h1>
+
+<p>{{ msg }}</p>
+
+<p style="text-align: center; font-size: 1.8em;"><a class="button button-primary" href="/">Return</a></p>
+
+
+    </div>
+  </div>
+{% endblock %}

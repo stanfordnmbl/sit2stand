@@ -1,0 +1,135 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+  <!-- Primary Page Layout
+       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+  <div class="section" id="analyze" style="padding: 4em 0; padding-bottom: 1em;">
+    <div class="container">
+      <div class="">
+	<h3 class="section-heading" style="text-align: center">Instruction Video</h3>
+	<div style="padding-bottom: 1em;">Please watch the instruction video and read the instructions fully before performing the test.</div>
+	<video width="320" height="240" style="position:relative" controls>
+	  <source src="https://mc-motionlab-storage.s3-us-west-2.amazonaws.com/static/instructions-3.mp4" type="video/mp4">
+	    Your browser does not support the video tag.
+	</video> 
+	<!--img class="u-max-full-width" src="{% static "images/record-me.png" %}"-->
+      </div>
+      </form>
+      <!--img class="u-max-full-width" src="{% static "images/placeholder.png" %}"-->
+    </div>
+<div class="container" style="text-align: left" id="instructions">
+      <h3 class="section-heading" style="text-align: center; padding: 1em 0;">Sit-to-Stand Instructions</h3>
+	<h4>Set-Up</h4>
+      <ul>
+	<li>Go to a well-lit room</li>
+	<li>Find a chair that is:<ul>
+	    <li>Sturdy</li>
+	    <li>Free-standing (not against a wall)</li>
+	    <li>Without wheels</li>
+	    <li>Not a couch or reclining chair</li></ul></li>
+	<li>Place the chair on a steady surface</li>
+      </ul>
+      
+      <h4>Participant Start Position</h4>
+
+      <ul>
+	<li>Sit comfortably in the chair</li>
+	<li>Cross your arms in front of you</li>
+	<li>Place your feet flat on the floor</li>
+      </ul>
+
+      <h4>Recorder Position</h4>
+
+      <ul>
+	<li>45-degree angle so you can see both the side and front of the participant</li>
+	<li>5-10 feet away so the participant’s head and feet stay in the video frame even while they are standing</li>
+      </ul>
+
+      <h4>&#x23FA; Start the recording</h4>
+
+    </div>
+</div>
+
+  <div class="section categories" style="padding-top: 3rem; font-size: 1.2em; padding-bottom: 1em;" id="instructions">
+    <div class="container" style="text-align: left; font-size: 1.2em">
+      <!--div class="video-container" style="margin-bottom: 2em;">
+      </div-->
+
+      <h4>Sit-To-Stand Test</h4>
+      <span style="font-weight: bold; font-size: 1.1em; text-decoration: underline;">AS QUICKLY AS YOU CAN 5 TIMES*</span>:
+      <ul>
+	<li><strong>Stand up straight and sit back down</strong>
+	  <ul>
+	    <li>No stopping between repetitions</li>
+	    <li>Stand up fully</li>
+	    <li>Do not touch the back of the chair between repetitions</li>
+	    <li>Do not push off of the chair with the back of your legs</li>
+	  </ul>
+	</li>
+	<li>Have the recorder count each stand aloud</li>
+	<li>Finishing seated in the chair</li>
+      </ul>
+      
+      <!--span style="font-weight: bold;">*Note: For your safty, we strongly recommend having another person with you.<br /></span-->
+      <span style="font-weight: bold;">*Note: If you experience any unusual discomfort or pain, you should stop the test immediately.</span>
+    </div>
+  </div>
+
+  <div class="section" id="analyze" style="padding: 1em 0; ">
+    <div class="container" style="text-align: left" id="instructions">
+      <h4>&#x23F9; Stop the recording</h4>
+
+      <h4 style="margin-top: 0.3em">Finish and Upload</h4>
+      <ul>
+	<li>Upload the video</li>
+	<li>Continue to the survey</li>
+      </ul>
+
+    </div>
+</div>
+  
+  <div class="section" id="analyze" style="padding: 1em 0; padding-bottom: 5em">
+    <div class="container">
+      <div class="" style="border: 3px dashed black; padding: 2em; background-color: #fafafa;">
+	<h3 style="margin-bottom: 0px"><span style="display:inline-block;">Record and upload your sit-to-stand test video.</span></h3>
+	<p class="section-description">
+
+	  <form method="POST" action="{% url 'form' %}" id="videoForm" name="videoForm" enctype="multipart/form-data">
+	    {% csrf_token %}
+	    {{ form.non_field_errors }}
+	    <div class="fieldWrapper">
+	      {{ form.file.errors }}
+	      <label for="file" style="font-weight: 600" id="id_file_label">
+		Click below to record or upload
+	      </label>
+	      <input class="button" type="file" style="max-width: 100%; width: auto;"
+		     name="file" accept="video/*;capture=camera" required="" id="id_file">
+	      {{ form.recordid.as_hidden  }}
+
+	      <label for="file" style="font-weight: 600; display: none" id="id_file_wait">
+		This may take a few minutes, please don't close this window.
+		<div><img class="u-max-full-width" src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" /></div>
+	      </label>
+	    </div>
+	    <!--div><input type="submit" value="Analyze my video" style="background: #ffffff;" /></div-->
+	</p>
+      </div>
+      </form>
+      <!--img class="u-max-full-width" src="{% static "images/placeholder.png" %}"-->
+    </div>
+  </div>
+
+
+  <script>
+    {{ recordid }}
+    document.getElementById("id_file").onchange = function() {
+    document.getElementById("videoForm").submit();
+    document.getElementById("id_file").disabled = true;
+    document.getElementById("id_file_label").style.display = "none";
+    document.getElementById("id_file_wait").style.display = "block";
+    };
+  </script>
+
+
+{% endblock %}

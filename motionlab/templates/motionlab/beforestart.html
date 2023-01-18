@@ -1,0 +1,49 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+  <!-- Primary Page Layout
+       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+    p {
+    font-size: 1.4em;
+    }
+    @media only screen and (max-width: 760px) {
+    .qr { display: none; }
+    }
+  </style>
+  <div class="section" style="padding-top: 3rem; font-size: 1.2em; padding-bottom: 1em;" id="instructions">
+    <div class="container" style="text-align: left">
+      <h2 class="section-heading" style="text-align: center">Before you start</h2>
+
+      <p>Please confirm:
+	<ul>
+	  <li><strong>You are over 40 years old</strong></li>
+	  <li>You are using your mobile device (e.g., phone, tablet, iPad)</li>
+	  <li>
+	    You have 20 minutes to complete the entire study (<i>Note</i>: if you close this screen, you will have to start the study from the beginning)</li>
+	  <li>Your mobile device is equipped with a working video camera</li>
+	  <li>You have another person with you to record your test</li>
+	  <li>You have a sturdy chair with a back and without wheels</li>
+      </p>
+
+      {% if not private %}
+      <p><strong>Thank you for your interest in our study! To receive a link to participate, please submit a request at the link below. </strong></p>
+<p style="text-align: center; font-size: 1.8em;"><a class="button button-primary" href="{% url 'application' %}">Request participation</a></p>
+      {% endif %}
+      {% if private %}
+      <p class="qr">
+	<div class="qr" style="text-align: center">
+	  <div style="padding-bottom: 0.5em; font-weight: bold;" class="qr">If you aren't using your phone, scan this code with your phone's camera to continue the study there!</div>
+	  <img class="qr" src="https://mc-motionlab-storage.s3-us-west-2.amazonaws.com/static/sit2stand-qr-private.png" />
+	</div>
+
+      </p>
+      <p style="text-align: center; font-size: 1.8em;">
+	<a class="button" href="{% url 'index' %}">Go back</a>
+	<a class="button button-primary" href="https://redcap.stanford.edu/surveys/?s=DHRTNEN4MW">Start</a>
+      </p>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+  <!-- Primary Page Layout
+       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+  <!--div style="border-bottom: 1px solid #eeeeee; background: #eeffee">
+    <div class="container">
+      <div class="row" style="text-align: center; font-size: 1.5em; padding: 1em;">
+	<div><strong>This study is closed.</strong><br />We are not recruiting more participants at the moment. If you would like to participate in the next study or similar ones in the future, please feel out <a href="{% url 'application'  %}">the application form</a>.</div>
+      </div>
+    </div>
+  </div-->
+  <div class="section hero" style="padding-top: 15rem;">
+    <div class="container">
+      <div class="row">
+        <div class="one-half column">
+          <h4 class="hero-heading">Analyze your movement with the latest video-analysis technology</h4>
+          <a class="button button-primary" href="{% url 'form'  %}">Evaluate your movement</a>
+	  <a class="button" href="/analysis/{{ example_slug }}/">Example video analysis</a>
+	  <a class="button" href="{% url 'aboutus' %}">Learn about our research</a>
+	  <p class="logos" style="padding: 1em;">
+	    <a target="_blank" href="https://stanford.edu/"><img src="{% static "images/stanford.png" %}"></a>
+	  </p>
+
+        </div>
+        <div class="one-half column phones">
+	  <div class="phone" style="width: 300px; height: 615px; position: relative;">
+            <div style="background-image: url('{% static "images/iphone.png" %}'); width: 100%; height: 100%; background-size: 100% 100%;"></div>
+	    <div style="background-image: url('{% static "images/sit2stand.gif" %}'); top: 11.8%; left: 6%; width: 88%; height: 76.5%; background-size: 100% 100%; position: absolute"></div>  
+            <!--img class="phone" src="{% static "images/iphone.png" %}"-->
+	  </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+
+  <div class="section categories" id="about" style="padding: 6rem 0 6rem;">
+    <div class="container">
+      <div class="row">
+        <div>
+	  <h3 class="section-heading">Evaluate your physical health by performing a simple test</h3>
+	  <!--p>It's as simple as:<ol><li>Recording a video with 5 sit-to-stand movements</li><li>Filling out a questionnaire</li></ol></p-->
+	</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="padding: 1em; margin: 0; margin-top: 1em;">
+    <div class="container">
+      <h4 class="section-heading">Our test was validated in a Stanford study (now closed)</h4>
+      
+      <p>
+	<div class="video-container" style="margin-bottom: 2em;">
+	  <video width="320" height="240" controls>
+	    <source src="https://mc-motionlab-storage.s3-us-west-2.amazonaws.com/static/recruitment.mp4" type="video/mp4">
+	      Your browser does not support the video tag.
+	  </video> 
+	</div>
+      </p>
+
+      <!--p>
+	<a class="button button-primary" href="{% url 'beforestart' %}">Join our study!</a>
+      </p-->
+      <!--p>
+	Apart from a $30 gift card for your participation, you'll be entered to win a $100 Amazon gift card!
+      </p-->
+
+    </div>
+  </div>
+  
+  <div class="section categories legal" id="about" style="padding: 6rem 0 6rem;">
+    <div class="container">
+      <p>
+	Our research was supported by the <a target="_blank" href="http://mobilize.stanford.edu/">Mobilize Center</a>, a National Institutes of Health Big Data to Knowledge (BD2K) Center of Excellence through Grant U54EB020405, and <a target="_blank" href="http://restore.stanford.edu/">RESTORE Center</a>, a National Institutes of Health Center through Grant P2CHD10191301.
+      </p>
+      <!--p>If you would like to enter the drawing without participating in the study, you may do so <a href="https://redcap.stanford.edu/surveys/?s=3JTLYRLKKL" target="_blank">here</a>.</p-->
+      </div>
+    </div>
+
+  <script>
+
+    document.getElementById("id_file").onchange = function() {
+    document.getElementById("videoForm").submit();
+    };
+  </script>
+
+
+{% endblock %}
