@@ -56,7 +56,8 @@ ENV DJANGO_SETTINGS_MODULE=motionlab.settings
 # Call collectstatic (customize the following line with the minimal environment variables needed for manage.py to run):
 # RUN DATABASE_URL='' python manage.py collectstatic --noinput
 
-RUN mkdir data ; python manage.py migrate ; python manage.py loaddata fixtures/startup-data.json
+RUN mkdir data ; python manage.py migrate ;
+# python manage.py loaddata fixtures/startup-data.json
 
 # Tell uWSGI where to find your wsgi file (change this):
 ENV UWSGI_WSGI_FILE=motionlab/wsgi.py

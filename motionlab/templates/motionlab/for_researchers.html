@@ -1,0 +1,186 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+<!-- Primary Page Layout
+     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<style>
+    .tooltip {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #ececec;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s;
+      margin-left: 200px;
+    }
+
+    .tooltip-icon {
+      margin-left: 5px;
+      cursor: pointer;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.1); /* Adjust the alpha (last value) to control overlay opacity */
+        backdrop-filter: blur(10px); /* Adjust the blur value as per your preference */
+        -webkit-backdrop-filter: blur(10px); /* For Safari support */
+        z-index: 9999; /* Make sure the overlay is above other content */
+        display: grid;
+        place-items: center; /* Vertically and horizontally center the content */
+    }
+
+    .centered-text {
+        text-align: center;
+        color: black;
+        padding: 20px;
+    }
+
+    .centered-text h1 {
+        font-size: 36px;
+        margin: 0;
+    }
+
+    .centered-text p {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+
+</style>
+
+<div class="container" style="text-align: left" id="instructions-container">
+    <div class="section" style="padding-top: 3rem; font-size: 1.2em; padding-bottom: 1em;" id="header">
+        <h3 class="section-heading" style="text-align: center; padding: 1em 0;">For Researchers</h3>
+        <h5 style="text-align: center;">Upload your videos and receive an email with your results.</h5>
+        <h6 style="text-align: center;">
+            <strong>Note: </strong> By uploading videos, you agree to share them under a
+            <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0 license</a>, so
+            permission from subjects must be obtained before upload. If permission to share identifiable videos is not
+            granted, you can blur the faces before uploading, or running Sit2Stand locally from our
+            <a href="https://github.com/stanfordnmbl/sit2stand-analysis">GitHub repository</a>.
+        </h6>
+    </div>
+</div>
+
+
+<div class="section" id="analyze" style="padding: 1em 0; padding-bottom: 5em">
+    <div class="container">
+        <form method="POST" action="{% url 'for_researchers' %}" id="videoForm" name="videoForm"
+              enctype="multipart/form-data">
+            <!--
+            <div class="container" style="text-align: left">
+                <div class="tooltip" style="width: 100%">
+                    <label for="output_requested">What do you need?</label>
+                    <span class="tooltiptext">
+                        - Basic Outputs: Repetition Detected, Total Tile, Average Cycle Time, Maximum Trunk Flexion, Maximum Trunk Acceleration
+                        <br>
+                        - Extended output: See manuscript for details.
+                    </span>
+                    <i class="fas fa-info-circle tooltip-icon"></i>
+                </div>
+                <select id="output_requested" name="output_requested" style="width: 100%">
+                    <option value="basic">Basic Outputs</option>
+                    <option value="extended">Extended Outputs</option>
+                </select>
+            </div>
+
+            <div class="container" style="text-align: left">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required style="width: 100%">
+            </div>
+
+            <div class="container" style="text-align: left">
+                <div class="tooltip" style="width: 100%">
+                    <label for="data_share">Data agreement</label>
+                    <span class="tooltiptext">
+                        The data share agreement text goes here...
+                    </span>
+                    <i class="fas fa-info-circle tooltip-icon"></i>
+                </div>
+                <select id="data_share" name="data_share" style="width: 100%">
+                    <option value="share">Share data</option>
+                    <option value="do-not-share">Do not Share data</option>
+                </select>
+            </div>
+            -->
+            <div class="" style="border: 3px dashed black; padding: 2em; background-color: #fafafa; margin-top: 2em;">
+                <h3 style="margin-bottom: 0px"><span style="display:inline-block;">Upload your research's videos.</span>
+                </h3>
+                <p class="section-description">
+
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                <div class="fieldWrapper">
+                    {{ form.file.errors }}
+                    <label for="id_file" style="font-weight: 600" id="id_file_label">
+                        Click below to upload your videos
+                    </label>
+                    <input class="button" type="file" style="max-width: 100%; width: auto;"
+                           name="file" accept="video/*;capture=camera" required="" id="id_file" multiple>
+                    {{ form.recordid.as_hidden }}
+
+                    <label style="font-weight: 600; display: none" id="id_file_wait">
+                        This may take a few minutes, please don't close this window.
+                        <img class="u-max-full-width"
+                             src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif"/>
+                    </label>
+                </div>
+                <!--div><input type="submit" value="Analyze my video" style="background: #ffffff;" /></div-->
+                <!--img class="u-max-full-width" src="{% static "images/placeholder.png" %}"-->
+            </div>
+
+        </form>
+
+        <div class="container" style="text-align: left" id="open-source-data">
+            <h3 class="section-heading" style="text-align: center; padding: 1em 0;">Open-source data and code</h3>
+            <ul>
+                <li style="list-style-type: none;">Want to tailor the processing pipeline for your unique research
+                    project?
+                    <ul>
+                        <li><a href="https://github.com/stanfordnmbl/sit2stand/" target="_blank">Check out our GitHub
+                            repository
+                            for accessing our full processing and analysis pipelines.</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    {{ recordid }}
+    document.getElementById("id_file").onchange = function() {
+    document.getElementById("videoForm").submit();
+    document.getElementById("id_file").disabled = true;
+    document.getElementById("id_file_label").style.display = "none";
+    document.getElementById("id_file_wait").style.display = "block";
+    };
+
+</script>
+
+<div class="section get-help" id="license" style="text-align: left;padding-bottom: 1em; padding-top: 0em;">
+    <div class="container" style="text-align: center;">
+        <a class="button" href="/">Return to the main page</a>
+    </div>
+</div>
+{% endblock %}

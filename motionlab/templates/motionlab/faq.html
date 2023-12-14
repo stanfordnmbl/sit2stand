@@ -1,0 +1,186 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+<!-- Primary Page Layout
+       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container" style="text-align: left" id="for-researchers-faq">
+    <div class="container">
+        <h3 class="section-heading" style="text-align: center; padding: 1em 0;">Sit2Stand FAQ</h3>
+        <h4 style="text-align: left;">The Web App</h4>
+        <ol>
+            <li>How do I use Sit2Stand.ai?
+                <ul>
+                    <li>There are two options for using Sit2Stand.ai: 1) Self-Assessment or 2) For Researchers.
+                        Self-assessment consists of receiving instructions, uploading a single video, and receiving
+                        basic outputs (test time, maximum trunk flexion, and maximum trunk acceleration). With the
+                        “For
+                        Researchers” tool, multiple videos can be uploaded at once, and an email will be sent when
+                        the
+                        results are ready. For this option, researchers can record their own videos and choose
+                        whether
+                        they want the basic outputs or extended outputs. Details can be found in our <a
+                                href="https://mobilize.stanford.edu/webinar-sit2stand-assessing-health-and-mobility-from-smartphone-videos/"
+                                target="_blank">webinar</a> and <a href="https://doi.org/10.1038/s41746-023-00775-1"
+                                                                   target="_blank">manuscript</a>.
+                    </li>
+                    <li>If you would like to customize our web application or processing code, you can do so from
+                        our
+                        Github repositories <a href="https://github.com/stanfordnmbl/sit2stand"
+                                               target="_blank">here</a>
+                        and <a href="https://github.com/stanfordnmbl/sit2stand-analysis" target="_blank">here</a>.
+                    </li>
+                </ul>
+            </li>
+
+            <li>What kind of device is required to use Sit2Stand.ai?
+                <ul>
+                    <li>Any device equipped with a camera can be used to record the video. Recording the video can
+                        be
+                        done directly in the web app or separately. The video can then be uploaded to the web app by
+                        any
+                        device with an Internet connection.
+                    </li>
+                </ul>
+            <li>What pose estimation algorithm is used?
+                <ul>
+                    <li>We use <a href="https://github.com/CMU-Perceptual-Computing-Lab/openpose" target="_blank">OpenPose</a>
+                        as the pose estimation algorithm. You can change this by cloning and customizing our <a
+                                href="https://github.com/stanfordnmbl/sit2stand-analysis" target="_blank">Github
+                            Repository</a>.
+                    </li>
+                </ul>
+            </li>
+            <li>How are joint angles calculated?
+                <ul>
+                    <li>After processing the videos with pose estimation, we calculate joint angles by computing the
+                        angle between key points in the camera plane (e.g., the knee angle is the angle between the
+                        ankle-knee-and hip key points). Additional details can be found in our <a
+                                href="https://doi.org/10.1038/s41746-023-00775-1" target="_blank">manuscript</a> and
+                        <a
+                                href="https://github.com/stanfordnmbl/sit2stand-analysis" target="_blank">Github
+                            Repository</a>.
+                    </li>
+                </ul>
+            </li>
+            <li>What are the optimal conditions for recording the sit-to-stand test?
+                <ul>
+                    <li>We found that pose estimation performed the best in a well-lit room, with one person in
+                        view,
+                        without background mirrors or highly reflective surfaces when the participant can be seen,
+                        without obstructions in front of the participant, with the participant’s full body in view,
+                        with
+                        the participant wearing fitted clothing, and with a standard chair without armrests, wheels,
+                        or
+                        thick cushioning. You can view the instructions we give to participants in our <a
+                                href="https://sit2stand.ai/assess/self/" target="_blank">instruction video</a>.
+                    </li>
+                </ul>
+            </li>
+            <li>Can I use more than one camera?
+                <ul>
+                    <li>Sit2Stand.ai is made for video upload from one camera per capture. If you are interested in
+                        the
+                        use of multiple cameras, we recommend <a href="https://www.opencap.ai/"
+                                                                 target="_blank">OpenCap</a>.
+                    </li>
+                </ul>
+            </li>
+            <li>Can Sit2Stand.ai integrate with external forces or a musculoskeletal model?
+                <ul>
+                    <li>The current Sit2Stand.ai pipeline does not integrate external forces or a musculoskeletal
+                        model.
+                        However, you can build upon the Sit2Stand.ai pipeline to input the joint position key points
+                        into a musculoskeletal model (like the <a href="https://www.opencap.ai/"
+                                                                  target="_blank">OpenCap</a> pipeline) or add
+                        external
+                        forces.
+                    </li>
+                </ul>
+            </li>
+            <li>Can I use Sit2Stand.ai to track progress over time?
+                <ul>
+                    <li>While you can periodically upload videos and retrieve results, we have not yet collected
+                        enough
+                        scientific evidence to show that change in variables is significant and clinically relevant.
+                        For
+                        that reason, we don’t advise you to make any decisions based on periodic measurements.
+                    </li>
+                </ul>
+            </li>
+            <li>Can I use Sit2Stand.ai to track multiple people at the same time?
+                <ul>
+                    <li>Sit2Stand.ai only assesses the closest person to the camera. Therefore, it cannot currently
+                        track multiple people at the same time.
+                    </li>
+                </ul>
+            </li>
+            <li>What are common issues for participants using Sit2Stand.ai?
+                <ul>
+                    <li>We found that “in the wild”, participants’ videos varied in camera position and orientation.
+                        It
+                        was also common for participants to move out of the camera frame or have an obstruction
+                        blocking
+                        part of the participant.
+                    </li>
+                </ul>
+            </li>
+            <li>What are other applications of the tool beyond osteoarthritis?
+                <ul>
+                    <li>This tool was primarily designed to evaluate the relationship between the sit-to-stand test
+                        and
+                        osteoarthritis. However, there are a number of studies on how OpenPose, the underlying
+                        technology, can be used to quantify movement and provide meaningful information for
+                        decision-making. For example, <a
+                                href="https://nmbl.stanford.edu/wp-content/uploads/Kidzinski-Nature-Comm.pdf"
+                                target="_blank">see this paper</a> for an application of a related technology to
+                        track
+                        cerebral palsy.
+                    </li>
+                </ul>
+            </li>
+            <li>What other factors should I consider when carrying out a digital biomechanics study?
+                <ul>
+                    <li>Check out <a
+                            href="https://mobilize.stanford.edu/webinar-sit2stand-assessing-health-and-mobility-from-smartphone-videos/"
+                            target="_blank">Part 2 (Tutorial) of our webinar</a> to learn more about considerations
+                        for
+                        digital biomechanics studies!
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        <h4 style="text-align: left;">Security and Ethics</h4>
+        <ol>
+            <li>Are the videos uploaded saved? What is the security of the saved videos?
+                <ul>
+                    <li>By using Sit2Stand.ai, you acknowledge that content submitted to this website is stored on
+                        Amazon Web Services (AWS) Cloud servers and that it will be available under a CC BY 4.0
+                        license.
+                        Videos submitted to the website are transferred using the secured protocol HTTPS and are
+                        stored
+                        at a unique random location in the AWS cloud. Videos are periodically moved from the cloud
+                        to a
+                        secure drive in the Stanford network. See our <a href="https://sit2stand.ai/terms/"
+                                                                         target="_blank">terms of use</a> for
+                        additional
+                        information.
+                    </li>
+                </ul>
+            </li>
+            <li>What considerations should be made for ethical use and IRB approval?
+                <ul>
+                    <li>All study procedures should be approved by the institute of the researcher submitting
+                        videos. To
+                        help with approval, researchers can anonymize the videos before submitting them.
+                    </li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="section get-help" id="license" style="text-align: left;padding-bottom: 1em; padding-top: 2em;">
+    <div class="container" style="text-align: center;">
+        <a class="button" href="/">Return to the main page</a>
+    </div>
+</div>
+{% endblock %}

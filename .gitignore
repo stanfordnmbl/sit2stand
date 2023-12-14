@@ -1,0 +1,12 @@
+__pycache__
+db.sqlite3
+*.pyc
+*~
+\#*
+.env
+sendgrid.env
+keys
+.idea
+inputs
+*.log
+node_modules

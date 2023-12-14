@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from motionlab.forms import VideoForm
+from motionlab.forms import VideoForm, MultipleVideosForm
 from django.forms.widgets import ClearableFileInput
 from django.shortcuts import render, redirect
 from motionlab.models import Video, Annotation
@@ -8,6 +8,7 @@ from motionlab import celery_app
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail, BadHeaderError
 import json
+import csv
 import os
 import boto3
 import math
@@ -15,13 +16,19 @@ from decouple import config
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 
 from .forms import ContactForm, ApplicationForm
 
 key_mapping = {
-    "time": "Time",
-    "consistency": "Consistency",
-    "n": "Num of repetitions",
+    "trunk_lean_max": "Trunk flexion",
+    "trunk_lean_max_ang_acc": "Trunk acceleration"
+}
+
+unit_mapping = {
+    "Trunk flexion": "degrees",
+    "Trunk acceleration": "degrees/s²",
+    "Total time": "s"
 }
 
 def consistency(x):
@@ -56,10 +63,54 @@ def analysis_json(request, slug):
     response['Content-Disposition'] = f'attachment; filename={slug}.json'
     return response
 
+
+def analysis_csv(request, slug):
+    # Get annotations from database.
+    annotation = Annotation.objects.get(video__slug=slug)
+    # Get data as json.
+    json_data = annotation.response
+    # Convert json into csv.
+    csv_data = ""
+    # Get file name and add it at start.
+    video_name = annotation.video.file.name.replace("inputs/", "").replace(".mp4", "")
+    csv_data += "filename" + ", " + video_name + "\n"
+    for attribute, value in json_data.items():
+        csv_data += attribute + ", " + str(value) + "\n"
+
+    # Generate and return response object.
+    response = HttpResponse(csv_data, content_type="text/csv")
+    response['Content-Disposition'] = f'attachment; filename={video_name}.csv'
+
+    return response
+
+def analysis_simple_csv(request, slug):
+    # Get annotations from database.
+    annotation = Annotation.objects.get(video__slug=slug)
+    # Get data as json.
+    json_data = annotation.response
+    # Convert json into csv.
+    csv_data = ""
+    # Get file name and add it at start.
+    video_name = annotation.video.file.name.replace("inputs/", "").replace(".mp4", "")
+    csv_data += "filename" + ", " + video_name + "\n"
+
+    # Add data to csv.
+    csv_data += "Total Time" + ", " + str(((json_data["time"] / json_data["n"]) * 5)) + "\n"
+    csv_data += "Trunk flexion" + ", " + str(json_data["trunk_lean_max"]) + "\n"
+    csv_data += "Trunk acceleration" + ", " + str(json_data["trunk_lean_ang_acc"]) + "\n"
+
+    # Generate and return response object.
+    response = HttpResponse(csv_data, content_type="text/csv")
+    response['Content-Disposition'] = f'attachment; filename=simple_{video_name}.csv'
+
+    return response
+
 def analysis(request, slug):
     video = Video.objects.get(slug=slug)
 
-    videos = Video.objects.all().order_by("id")
+    # Get video_name.
+    video_name = video.file.name.replace("inputs/", "").replace(".mp4", "")
+
     example_slug = "0eHy4fTr"
 #    if videos.count()>0:
 #        example_slug = videos[0].slug
@@ -82,13 +133,110 @@ def analysis(request, slug):
     results = annotation.response
 
     if results:
+        # Calculate total time.
+        total_time = (results["time"] / results["n"]) * 5
+
         results = update_results(results)
+        # Add total time.
+        results["Total time"] = total_time
+
+        # Format and add units.
+        for key, label in results.items():
+            if key == "Trunk flexion":
+                results[key] = str(round(label - 180, 1)) + " " + unit_mapping[key]
+            elif key == "Trunk acceleration":
+                results[key] = str(int(round(label, 0))) + " " + unit_mapping[key]
+            else:
+                results[key] = str(round(label, 1)) + " " + unit_mapping[key]
+
+        # Sort elements.
+        results = dict(sorted(results.items()))
+
     return render(request, 'motionlab/analysis.html', {
         "video": video,
+        "video_name": video_name,
         "annotation": annotation,
         "results": results,
         "is_example": example_slug == slug,
     })
+
+def analysis_multiple(request, slugs):
+
+    video_slugs = []
+    annotation_file_urls = {}
+    video_file_urls = {}
+    annotation_statuses = {}
+    results_list = {}
+    video_names = []
+
+    for slug in slugs:
+        video = Video.objects.get(slug=slug)
+
+        # Get annotations.
+        if video.annotation_set.count() == 0:
+            ann = Annotation(video=video)
+            ann.save()
+            celery_app.send_task("motionlab.sitstand", ({
+                "annotation_id": ann.id,
+                "video_url": video.file.url,
+                "subject_id": video.slug
+            }, ))
+
+        annotations = video.annotation_set.all()
+        annotation = None
+        if annotations.count() > 0:
+            annotation = annotations[0]
+
+        # convert to int
+        results = annotation.response
+
+        if results:
+            # Calculate total time.
+            total_time = (results["time"] / results["n"]) * 5
+
+            results = update_results(results)
+            # Add total time.
+            results["Total time"] = total_time
+
+            # Format and add units.
+            for key, label in results.items():
+                if key == "Trunk flexion":
+                    results[key] = str(round(label - 180, 1)) + " " + unit_mapping[key]
+                elif key == "Trunk acceleration":
+                    results[key] = str(int(round(label, 0))) + " " + unit_mapping[key]
+                else:
+                    results[key] = str(round(label, 1)) + " " + unit_mapping[key]
+
+
+            # Sort elements.
+            results = dict(sorted(results.items()))
+            results_list[video.slug] = results
+
+        video_slugs.append(video.slug)
+        video_file_urls[video.slug] = video.file.url
+
+        # Get video_name.
+        video_name = video.file.name.replace("inputs/", "").replace(".mp4", "")
+        video_names.append(video_name)
+
+        if annotation.file:
+            annotation_file_urls[video.slug] = annotation.file.url
+        else:
+            annotation_file_urls[video.slug] = None
+        annotation_statuses[video.slug] = annotation.status
+        results_list[video.slug] = results
+
+
+
+    return render(request, 'motionlab/analysis_multiple.html', {
+        "video_slugs": video_slugs,
+        "video_names": video_names,
+        "video_file_urls": json.dumps(video_file_urls),
+        "annotation_file_urls": json.dumps(annotation_file_urls),
+        "annotation_statuses": json.dumps(annotation_statuses),
+        "results_list": json.dumps(results_list)
+    })
+
 
 def index(request):
     videos = Video.objects.all().order_by("id")
@@ -102,6 +250,9 @@ def index(request):
     
 def consent(request):
     return render(request, 'motionlab/consent.html')
+
+def faq(request):
+    return render(request, 'motionlab/faq.html')
 
 def thankyou(request, mode):
     msg = "Thank you for your interest in this study. At this time, your responses do not qualify you to participate. If you agreed to be contacted in the future, we may contact you with future opportunities."
@@ -179,8 +330,9 @@ def readiness(request, page):
         "hackmode": hackmode,
     })
 
+
 @csrf_exempt
-def form(request):
+def self_assess(request):
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
@@ -191,23 +343,79 @@ def form(request):
                 "annotation_id": ann.id,
                 "video_url": obj.file.url,
                 "subject_id": obj.slug,
-            }, ))
+            },))
             return redirect("validate", obj.slug)
     else:
         form = VideoForm(initial={'recordid': -1})
-        
+
     form.fields["file"].widget.attrs['accept'] = 'video/*;capture=camera'
 
-    return render(request, 'motionlab/form.html', {
+    return render(request, 'motionlab/self_assess.html', {
         "form": form,
         # "recordid": request.session["recordid"]
     })
+
+@csrf_exempt
+def under_construction(request):
+    return render(request, 'motionlab/under_construction.html')
+
+@csrf_exempt
+def for_researchers(request):
+    if request.method == 'POST':
+        form = MultipleVideosForm(request.POST, request.FILES)
+        if form.is_valid():
+            files = request.FILES.getlist('file')  # Get a list of uploaded files
+            slugs = []
+            for file in files:
+                obj = Video(file=file, recordid=form.cleaned_data['recordid'])
+                obj.save()
+                ann = Annotation(video=obj)
+                ann.save()
+                slugs.append(obj.slug)
+                celery_app.send_task("motionlab.sitstand", ({
+                    "annotation_id": ann.id,
+                    "video_url": obj.file.url,
+                    "subject_id": obj.slug,
+                },))
+            return redirect("validate_multiple", slugs)
+    else:
+        form = MultipleVideosForm(initial={'recordid': -1})
+
+    form.fields["file"].widget.attrs['accept'] = 'video/*;capture=camera'
+    form.fields["file"].widget.attrs['multiple'] = True  # Allow multiple file selection
+
+    return render(request, 'motionlab/for_researchers.html', {
+        "form": form,
+    })
+
+
+@csrf_exempt
+def assess(request):
+    form = VideoForm(initial={'recordid': -1})
+
+    form.fields["file"].widget.attrs['accept'] = 'video/*;capture=camera'
+
+    return render(request, 'motionlab/assess.html', {
+        "form": form,
+        # "recordid": request.session["recordid"]
+    })
+
 
 def validate(request, slug):
     video = Video.objects.get(slug=slug)
 
     return render(request, 'motionlab/validate.html', {
         "video": video,
+    })
+
+def validate_multiple(request, slugs):
+    videos = []
+    for slug in slugs:
+        video = Video.objects.get(slug=slug)
+        videos.append(video)
+
+    return render(request, 'motionlab/validate_multiple.html', {
+        'videos': videos
     })
 
 def uploadDirectory(source_path, target_path, bucketname):
@@ -267,7 +475,7 @@ def contact(request):
         if form.is_valid():
             message = Mail(
                 from_email='Sit2Stand User <sit2stand.ai@gmail.com>',
-                to_emails=['sit2stand.ai@gmail.com','lukasz.kidzinski@gmail.com'],
+                to_emails=['sit2stand.ai@gmail.com','lukasz.kidzinski@gmail.com', 'mboswell229@gmail.com'],
                 subject=form.cleaned_data['subject'],
                 html_content=form.cleaned_data['message'])
             message.reply_to = form.cleaned_data['your_email']
