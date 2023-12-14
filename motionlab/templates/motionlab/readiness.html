@@ -14,7 +14,7 @@
 
       <p>{{ question }}</p>
 
-<p style="text-align: center; font-size: 1.8em;"><a class="button button-primary" href="{% if answer is False %}{% ifequal next 12 %}{% url 'readiness' 100 %}{% else %}{% url 'thankyou' thankyoumode %}{% endifequal %}{% else %}{% url 'readiness' next %}{% endif %}">Yes</a> &nbsp; <a class="button button-primary" href="{% if answer is True %}{% url 'thankyou' thankyoumode %}{% else %}{% ifequal next 13 %}{% url 'form' %}{% else %}{% url 'readiness' next %}{% endifequal %}{% endif %}">No</a></p>
+<p style="text-align: center; font-size: 1.8em;"><a class="button button-primary" href="{% if answer is False %}{% ifequal next 12 %}{% url 'readiness' 100 %}{% else %}{% url 'thankyou' thankyoumode %}{% endifequal %}{% else %}{% url 'readiness' next %}{% endif %}">Yes</a> &nbsp; <a class="button button-primary" href="{% if answer is True %}{% url 'thankyou' thankyoumode %}{% else %}{% ifequal next 13 %}{% url 'self_assess' %}{% else %}{% url 'readiness' next %}{% endifequal %}{% endif %}">No</a></p>
 
     </div>
   </div>

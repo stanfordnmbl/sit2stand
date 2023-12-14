@@ -1,0 +1,114 @@
+{% extends "motionlab/base.html" %}
+{% load static %}
+{% block content %}
+<!-- Primary Page Layout
+       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="section" id="analyze" style="padding: 4em 0; padding-bottom: 1em;">
+    <div class="container" style="margin-bottom: 4em;">
+        <div class="">
+            <h3 class="section-heading" style="text-align: center">
+                <strong>Analyze sit-to-stand movement from smartphone video</strong>
+            </h3>
+            <div class="row" style="margin-top: 4em">
+                <div class="one-half column">
+                    <a class="button button-primary" href="{% url 'self_assess'  %}">SELF-ASSESSMENT</a>
+                    <p style="margin-bottom: 0em;">Instructions to perform the test at home</p>
+                    <p style="margin-bottom: 0em;">Submit a single video</p>
+                    <p>Receive basic metrics</p>
+                </div>
+                <div class="one-half column">
+                    <a class="button button-primary" href="{% url 'for_researchers'  %}">FOR RESEARCHERS</a>
+                    <p style="margin-bottom: 0em;">Submit multiple videos</p>
+                    <p>Receive spreadsheet with extended metrics</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="section categories" id="example" style="padding: 6rem 0 6rem;">
+        <div class="container">
+            <div class="row">
+                <div>
+                    <h3 class="section-heading">Example Assessment Results</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="section" style="padding-top: 5rem; padding-bottom: 1rem; padding-left: 1em; padding-right: 1em;">
+        <div class="container">
+            <div class="row">
+                <div class="one-half column">
+                    <h3>Original video</h3>
+                    <div class="video-container" style="margin-bottom: 2em; height: 20em;">
+                        <video controls style="width: 100%; height: 100%" autoplay loop muted>
+                            <source src="https://mc-motionlab-storage.s3.amazonaws.com/media/inputs/a0513afe-04d2-417b-a88c-cfd38747d703.mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+                <div class="one-half column">
+                    <h3>Motion Analysis</h3>
+                    <div class="video-container" style="margin-bottom: 2em; height: 20em;">
+                        <video controls style="width: 100%; height: 100%" autoplay loop muted>
+                            <source src="https://mc-motionlab-storage.s3.amazonaws.com/media/outputs/f47e35e6-4cc6-443f-b21c-d2f20797a0bd.mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="section categories" id="results" style="padding: 6rem 0 6rem;">
+    <div class="container">
+        <div class="row">
+            <div>
+                <h3 class="section-heading">
+                    Results
+                </h3>
+
+                <div style="text-align: center">
+                    <table style="margin-left:auto; margin-right:auto;">
+                        <tbody>
+                        <tr>
+                            <th style="text-align: right;">Total time</th>
+                            <td>14.6 s</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: right;">Trunk acceleration</th>
+                            <td>538 degrees/s²</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: right;">Trunk flexion</th>
+                            <td>25.9 degrees</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a class="button" href="/assess/results/JSmkKBBt/json/">Download all metrics</a>
+                </div>
+
+                <div class="container">
+                    <small>
+                        Note: The total time is calculated assuming 5 repetitions. If fewer than 5 repetitions are
+                        detected, the average time per repetition is calculated and then multiplied by 5. Trunk flexion
+                        is determined by the forward trunk lean compared to the vertical axis of the camera frame. Trunk
+                        flexion and acceleration are reported as the average of the maximum flexion and acceleration
+                        over all cycles.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section get-help" id="license" style="text-align: left;padding-bottom: 1em; padding-top: 2em;">
+    <div class="container" style="text-align: center;">
+        <a class="button" href="/">Return to the main page</a>
+    </div>
+</div>
+{% endblock %}

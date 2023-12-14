@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ieq1!ik0pt*j)pag5o%%(iy$jn!bj6iwe!x$-3pf5$va+cs#45'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #False
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'captcha',
     'motionlab',
     'randomslugfield',
 #    'corsheaders',
@@ -107,6 +108,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Max file size.
+# Set FILE_UPLOAD_MAX_MEMORY_SIZE to 1 GB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1 * 1024 * 1024 * 1024  # 51 GB
+
+# Set DATA_UPLOAD_MAX_MEMORY_SIZE to 1 GB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

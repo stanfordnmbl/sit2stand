@@ -2,56 +2,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZ8EHC944"></script>
-  <script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZ8EHC944"></script>
+    <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     
     gtag('config', 'G-EMZ8EHC944');
-  </script>
-  <!-- TikTok Pixel Code Start -->
-  <script>
+
+    </script>
+    <!-- TikTok Pixel Code Start -->
+    <script>
     !function (w, d, t) {
     w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++
 )ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=i+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
   ttq.load('C35AUNNG09FB96L8RIIG');
   ttq.page();
 }(window, document, 'ttq');
-</script>
-<!-- TikTok Pixel Code End -->
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>On-line Movement Analysis</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
+    </script>
+    <!-- TikTok Pixel Code End -->
 
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Sit2Stand</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="{% static "css/normalize.css" %}">
-  <link rel="stylesheet" href="{% static "css/skeleton.css" %}">
-  <link rel="stylesheet" href="{% static "css/custom.css" %}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
 
-  <!-- Scripts
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/skeleton.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
 
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="../../dist/images/favicon.png">
-  <style>
+    <!-- Scripts
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.2/jszip.min.js"></script>
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="../../dist/images/favicon.png">
+    <style>
     .categories a {color: #ffffff;}
     .categories a:hover {color: #ffffff; text-decoration: none}
     .categories {
@@ -61,6 +65,11 @@
     img.headshot {
     border-radius: 50%;
     width: 100%
+}
+@media (min-width: 768px) {
+    .row.team {
+        display: flex;
+    }
 }
 .video-container {
     position: relative;
@@ -151,7 +160,7 @@ iframe, video  {
   .navbar-spacer {
     display: block;
     width: 100%;
-    height: 3.5rem;
+    height: 5rem;
     background: #fff;
     z-index: 99;
     border-top: 1px solid #eee;
@@ -187,37 +196,61 @@ iframe, video  {
   /* Re-overiding the width 100% declaration to match size of % based container */
   .has-docked-nav .navbar > .container {
     width: 80%; }
-    
-  </style>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EB698K2W46"></script>
-  <script>
+
+  .box {
+      flex: 1 1 25%;
+      padding: 10px;
+  }
+
+  .box-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1em;
+  border-style: solid;
+  padding: 0.5em;
+}
+
+.box-link a {
+  text-align: center;
+}
+
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EB698K2W46"></script>
+    <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     
     gtag('config', 'G-EB698K2W46');
-  </script>
+
+    </script>
 </head>
 <body>
 
-  <div class="navbar-spacer"></div>
-    <nav class="navbar">
-      <div class="container">
+<div class="navbar-spacer"></div>
+<nav class="navbar">
+    <div class="container">
         <ul class="navbar-list">
-{% block navbar %}
-<li class="navbar-item"><a class="navbar-link" href="/contact/"><i class="fa fa-envelope" style="background: none; color: inherit; line-height: inherit; margin: 0; font-size: inherit; padding: inherit; padding-right: 0.2em;"></i> Contact coordinator</a></li>
+            {% block navbar %}
+            <a href="{% url 'index'  %}">
+                <img width="150vw" src="{% static 'images/logo.png' %}">
+            </a>
+            <!-- <li class="navbar-item"><a class="navbar-link" href="/contact/"><i class="fa fa-envelope" style="background: none; color: inherit; line-height: inherit; margin: 0; font-size: inherit; padding: inherit; padding-right: 0.2em;"></i> Contact coordinator</a></li> -->
 
-<li class="navbar-item"><a class="navbar-link" href="{% url 'terms' %}"><i class="fa fa-balance-scale" style="background: none; color: inherit; line-height: inherit; margin: 0; font-size: inherit; padding: inherit; padding-right: 0.2em;"></i> Terms</a></li>
-{% endblock %}
+            <li class="navbar-item"><a class="navbar-link" href="{% url 'faq' %}">
+                <i class="fa fa-question-circle"></i>FAQ</a>
+            </li>
+            <li class="navbar-item"><a class="navbar-link" href="{% url 'terms' %}">
+                <i class="fa fa-balance-scale"></i>Terms</a>
+            </li>
+            {% endblock %}
         </ul>
-      </div>
-    </nav>
-    
+    </div>
+</nav>
+
 {% block content %}
-
-
-  
 
 
 {% endblock %}

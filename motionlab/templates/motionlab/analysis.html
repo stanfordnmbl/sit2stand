@@ -130,7 +130,7 @@ function copyToClipboard() {
   </div>
 
   {% if annotation.status == "done" or annotation.status == "error"  %}
-  <div class="section categories" id="analyze" style="padding: 2rem 0;">
+  <div class="section categories" id="analyze" style="padding: 6rem 0 6rem;">
     <div class="container">
       <h3 class="section-heading">
 	{% if annotation.status == "processing" or annotation.status == "submitted" %}
@@ -138,7 +138,7 @@ function copyToClipboard() {
 	{% elif annotation.status == "error" %}
 	Processing finished with an error, we are investigating it.
 	{% else %}
-	Your movement analysis
+	Results
 	{% endif %}
       </h3>
       {% if annotation.status == "done" %}
@@ -150,34 +150,20 @@ function copyToClipboard() {
 	</tr>
 	{% endfor %}
       </table>
-	<a class="button" href="/analysis/{{ annotation.video.slug }}/json/">Download all metrics</a>
+	<a class="button" href="/assess/results/{{ annotation.video.slug }}/analysis_simple_csv/">Download simple metrics</a>
+	<a class="button" href="/assess/results/{{ annotation.video.slug }}/csv/">Download all metrics</a>
       </div>
+
+      <small>
+	  Note: The total time is calculated assuming 5 repetitions. If fewer than 5 repetitions are detected, the average time per repetition is calculated and then multiplied by 5. Trunk flexion is determined by the forward trunk lean compared to the vertical axis of the camera frame. Trunk flexion and acceleration are reported as the average of the maximum flexion and acceleration over all cycles.
+      </small>
+     </div>
       {% endif %}
       <div>
       </div>
     </div>
   </div>
 
-
-  
-  <div class="section" style="padding-top: 5rem; padding-bottom: 1rem;">
-    <div class="container">
-      {% if annotation.status == "done" %}
-    <div class="container" style="padding-bottom: 1.5em;">
-      <div class="one-half column">
-	<img class="u-max-full-width" src="{{ MEDIA_URL }}outputs/{{ annotation.video.slug }}/plots/knee-flex-curves.png" />
-      </div>
-      <div class="one-half column" style="text-align: left">
-<p style="font-weight: bold; margin-bottom: 0.3em;">The angles of your joints</p>
-	These curves show the angle of your left knee when you perform the sit-to-stand test. One curve corresponds to one repetition. The more similar the curves, the more consistent your movement.
-      </div>
-    </div>
-
-    
-
-    {% endif %}
-    </div>
-  </div>
   {% endif %}
 
   <div class="section categories" style="padding-top: 3rem; padding-bottom: 0rem;">

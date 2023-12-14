@@ -4,6 +4,8 @@ from motionlab.models import Video
 from django import forms
 from django.utils.safestring import mark_safe
 from django.forms import ModelForm, FileInput
+from captcha.fields import CaptchaField
+import uuid
 
 class VideoForm(ModelForm):
 #    terms_confirmed = forms.BooleanField(label=mark_safe("I've read and accept <a href='#license'>the terms of use</a>."))
@@ -15,10 +17,20 @@ class VideoForm(ModelForm):
 #            'file': FileInput(attrs={'class': "dropzone"}),
         }
 
+
+class MultipleVideosForm(ModelForm):
+    class Meta:
+        model = Video
+        fields = ["file", "recordid"]
+        widgets = {
+            "file": forms.FileInput(attrs={'multiple': True})  # Add 'multiple' attribute to the widget
+        }
+
 class ContactForm(forms.Form):
     your_email = forms.EmailField(required=True)
     subject = forms.CharField(required=True)
     message = forms.CharField(widget=forms.Textarea(attrs={'style': 'min-height: 7em;'}), required=True)
+    # captcha = CaptchaField()
 
 class ApplicationForm(forms.Form):
     your_name = forms.CharField(required=True)

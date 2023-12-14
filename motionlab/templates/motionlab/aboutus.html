@@ -1,9 +1,12 @@
 {% extends "motionlab/base.html" %}
 {% load static %}
 {% block navbar %}
-<li class="navbar-item"><a class="navbar-link" href="javascript:history.go(-1)"><i class="fa fa-arrow-left" style="background: none; color: inherit; line-height: inherit; margin: 0; font-size: inherit; padding: inherit; padding-right: 0.2em;"></i> Back to the study</a></li>
+<li class="navbar-item"><a class="navbar-link" href="javascript:history.go(-1)"><i class="fa fa-arrow-left"
+                                                                                   style="background: none; color: inherit; line-height: inherit; margin: 0; font-size: inherit; padding: inherit; padding-right: 0.2em;"></i>
+    Back to the study</a></li>
 {% endblock %}
 {% block content %}
+
 <style>
 .section {
   padding: 5rem 0 5rem;
@@ -11,73 +14,202 @@
 .title {
   font-size: 0.7em;
 }
+
 </style>
-  <div class="section">
-    <div class="container">
-      <h3 class="section-heading">Our Vision</h3>
 
-      <p style="font-size: 1.2em; margin-bottom: 1.2em; padding-bottom: 0em; padding-top: 1em; padding-top: 2em;">Develop at-home clinical assessments for physical and mental health in order to test and develop accessible health-improving interventions.</p>
+<div class="section">
+    <div class="container">
+        <h3 class="section-heading">Our Vision</h3>
+
+        <p style="font-size: 1.2em; margin-bottom: 1.2em; padding-bottom: 0em; padding-top: 1em; padding-top: 2em;">Our
+            goal is to develop at-home clinical assessments for physical and mental health in order to test and develop
+            accessible health-improving interventions.</p>
 
     </div>
-  </div>
+</div>
 
-  <div class="section categories">
+<div class="section categories" style="padding: 6rem 0 6rem;; text-align: center;">
+    <h3 style="margin-top: 0em; margin-bottom: 1em;" class="section-heading">Team</h3>
     <div class="container">
-      <h3 style="margin-top: 0em; margin-bottom: 1em;" class="section-heading">Team</h3>
-      <div class="row team">
-	<div class="three columns"><img class="headshot u-max-full-width" src="https://nmbl.stanford.edu/wp-content/uploads/Melissa_Boswell_smaller.jpg" />
-	  Melissa Boswell
-	  <!--div class='title'>Ph.D. Candidate<br/> and Study Coordinator</div-->
-	</div>
-	<div class="three columns"><img class="headshot u-max-full-width" src="https://nmbl.stanford.edu/wp-content/uploads/Jen_Hicks_smaller.jpg" />
-	  Jennifer Hicks
-	  <!--div class='title'>Senior Research Engineer</div-->
-	</div>
-	<div class="three columns"><img class="headshot u-max-full-width" src="https://nmbl.stanford.edu/wp-content/uploads/Scott_Delp_Cut.jpg" />
-	  Scott Delp
-	  <!--div class='title'>Principal Investigator</div-->
-	</div>
-	<div class="three columns"><img class="headshot u-max-full-width" src="https://nmbl.stanford.edu/wp-content/uploads/Lukasz_Kidzinsk_smaller.jpg" />
-	  Łukasz Kidziński
-	  <!--div class='title'>Researcher<br/></div-->
-	</div>
-      </div>
-      <div class="row team" style="padding: 1.5em;">
-	<a href="http://nmbl.stanford.edu/" target="_blank">Learn more about the Neuromuscular Biomechanics Lab at Stanford.</a>
-      </div>
+        <div class="row team">
+            <div class="three columns">
+                <img class="headshot u-max-full-width"
+                     src="https://nmbl.stanford.edu/wp-content/uploads/Melissa_Boswell_smaller.jpg"/>
+                <strong>Melissa Boswell, PhD</strong>
+                Researcher and Study Coordinator
+                <!--div class='title'>Ph.D. Candidate<br/> and Study Coordinator</div-->
+            </div>
+            <div class="three columns">
+                <img class="headshot u-max-full-width"
+                     src="https://nmbl.stanford.edu/wp-content/uploads/Lukasz_Kidzinsk_smaller.jpg"/>
+                <strong>Łukasz Kidziński, PhD</strong>
+                Researcher and Data Scientist
+                <!--div class='title'>Researcher<br/></div-->
+            </div>
+            <div class="three columns">
+                <img class="headshot u-max-full-width"
+                     src="https://nmbl.stanford.edu/wp-content/uploads/Jen_Hicks_smaller.jpg"/>
+                <strong>Jennifer Hicks, PhD</strong>
+                Senior Research Engineer
+                <!--div class='title'>Senior Research Engineer</div-->
+            </div>
+            <div class="three columns">
+                <img class="headshot u-max-full-width"
+                     src="https://nmbl.stanford.edu/wp-content/uploads/Scott_Delp_Cut.jpg"/>
+                <strong>Scott Delp, PhD</strong>
+                Principal Investigator
+                <!--div class='title'>Principal Investigator</div-->
+            </div>
+        </div>
+        <div class="row team" style="padding: 1.5em; margin-top: 2em;">
+            <div class="column">
+                <a href="http://nmbl.stanford.edu/" target="_blank">Learn more about the Neuromuscular Biomechanics Lab
+                    at
+                    Stanford.</a>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
 
-  <div class="section">
+<div class="section" style="padding: 1em; margin: 0; margin-top: 1em;">
     <div class="container">
-      <h3 class="section-heading" style="padding-bottom: 1em;">Research</h3>
+        <div class="row">
+            <h3 class="section-heading">Research</h3>
+        </div>
 
-      <div class="video-container" style="margin-bottom: 2em;">
-	<iframe src="https://www.youtube.com/embed/pb4WvAhsRe4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-	<img class="u-max-full-width" src="{% static "images/placeholder.png" %}">
-      </div>
 
-      <p style="margin-bottom: 0.2em;">Łukasz Kidziński*, Bryan Yang*, Jennifer Hicks, Apoorva Rajagopal, Scott Delp, Michael Schwartz, "<a href="https://www.nature.com/articles/s41467-020-17807-z">Deep neural networks enable quantitative movement analysis using single-camera videos</a>", Nature Communications (2020)
-	<div style="font-size: 0.9em; text-align: right;">* These authors contributed equally to this work</div>
-      </p>
+        <div class="row" style="text-align: left">
+            <p>
+            <h4 class="section-heading">Webinar</h4>
+            <dl>
+                <dt>
+                    <a target="_blank"
+                       href="https://mobilize.stanford.edu/webinar-sit2stand-assessing-health-and-mobility-from-smartphone-videos/">Webinar:
+                        Sit2Stand - Assessing Health and Mobility from Smartphone Videos</a></dt>
+                <dd>- Our Sit2Stand research studies</dd>
+                <dd>- How to implement Sit2Stand.ai in your study</dd>
+                <dd>- Best practices and pitfalls in digital studies</dd>
+            </dl>
+        </div>
 
-           <p style="margin-bottom: 0.2em; margin-top: 2em; padding-top: 1em; border-top: 1px solid #999999">Melissa A. Boswell*, Scott D. Uhlrich*, Łukasz Kidziński, Kevin Thomas, Julie A. Kolesar, Garry E. Gold, Gary S. Beaupre, Scott L. Delp, "<a href='https://www.sciencedirect.com/science/article/pii/S1063458421000030'>A neural network to predict the knee adduction moment in patients with osteoarthritis using anatomical landmarks obtainable from 2D video analysis</a>", Osteoarthritis and Cartilage&nbsp;(2021)
-	<div style="font-size: 0.9em; text-align: right;">* These authors contributed equally to this work</div>
-      </p>
- 
-      <p class="logos" style="margin-top: 2em; padding-top: 1em; border-top: 1px solid #999999">
-	<a target="_blank" href="https://stanford.edu/"><img src="{% static "images/stanford.png" %}"></a>
-	<a target="_blank" href="https://www.gillettechildrens.org/"><img src="{% static "images/gillette.png" %}"></a>
-	<a target="_blank" href="https://twin-cities.umn.edu/"><img src="{% static "images/uminn.png" %}"></a>
-	<a target="_blank" href="https://www.nature.com/ncomms/"><img src="{% static "images/nature-comm.png" %}"></a>
-      </p>
+        <hr>
+
+        <div class="row" style="text-align: left">
+            <h4 class="section-heading" style="align: left">Predicting health outcomes from smartphone videos | Video
+                abstract</h4>
+        </div>
+        <div class="container">
+            <div class="video-container">
+                <iframe width="320" height="240"
+                        src="https://www.youtube.com/embed/Z1x5NrD2Rb8"
+                        title="Predicting health outcomes from smartphone videos | Video abstract"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row" style="text-align: left">
+            <p class="section-heading">Read our <a target="_blank"
+                                                   href="https://healthcommunity.nature.com/posts/predicting-health-outcomes-from-smartphone-videos">Nature
+                Portfolio blog post</a></p>
+        </div>
+
+        <hr>
+
+        <div class="row" style="text-align: left">
+            <p class="section-heading">Melissa Boswell*, Łukasz Kidziński*, Jennifer Hicks, Scott Uhlrich, Antoine
+                Falisse, Scott L. Delp, <a target="_blank" href="https://www.nature.com/articles/s41746-023-00775-1">"Smartphone
+                    videos of the sit-to-stand test predict osteoarthritis and health
+                    outcomes in a nationwide study"</a>, npj Digital Medicine (2023)</p>
+        </div>
+        <div class="row" style="text-align: right">
+            <small>* These authors contributed equally to this work</small>
+        </div>
+
+        <hr>
+
+        <div class="row" style="text-align: left">
+            <p class="section-heading">Read the <a target="_blank"
+                                                   href="https://www.nibib.nih.gov/news-events/newsroom/home-videos-assess-musculoskeletal-health">Science
+                Highlight from the National Institute of Biomedical Imaging and Bioengineering</a></p>
+        </div>
+
+        <hr>
+
+        <div class="row" style="text-align: left">
+            <h4 class="section-heading" style="align: left">Quantitative movement analysis at home using single camera
+                videos</h4>
+        </div>
+        <div class="container">
+            <div class="video-container">
+                <iframe width="320" height="240"
+                        src="https://www.youtube.com/embed/pb4WvAhsRe4"
+                        title="Quantitative movement analysis at home using single camera videos"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row" style="text-align: left">
+            <p class="section-heading">Melissa A. Boswell*, Scott D. Uhlrich*, Łukasz Kidziński, Kevin Thomas, Julie A.
+                Kolesar, Garry
+                E. Gold, Gary S. Beaupre, Scott L. Delp, <a target="_blank"
+                                                            href="https://www.sciencedirect.com/science/article/pii/S1063458421000030">"A
+                    neural network to predict the knee adduction moment in patients with
+                    osteoarthritis using anatomical landmarks obtainable from 2D video analysis"</a>, Osteoarthritis and
+                Cartilage (2021)</p>
+        </div>
+        <div class="row" style="text-align: right">
+            <small style="text-align: right">* These authors contributed equally to this work</small>
+        </div>
+
+        <hr>
+
+        <div class="row" style="text-align: left">
+            <p class="section-heading">Łukasz Kidziński*, Bryan Yang*, Jennifer Hicks, Apoorva Rajagopal, Scott Delp,
+                Michael Schwartz,
+                <a target="_blank" href="https://www.nature.com/articles/s41467-020-17807-z">"Deep neural networks
+                    enable quantitative movement analysis using single-camera videos"</a>,
+                Nature Communications (2020)</p>
+        </div>
+        <div class="row" style="text-align: right">
+            <small>* These authors contributed equally to this work</small>
+        </div>
+
+        <hr>
+
+        <p class="logos" style="margin-top: 2em; padding-top: 1em;">
+            <a target="_blank" href="https://stanford.edu/"><img src="{% static 'images/stanford.png' %}"></a>
+            <a target="_blank" href="https://www.gillettechildrens.org/"><img src="{% static 'images/gillette.png' %}"></a>
+            <a target="_blank" href="https://twin-cities.umn.edu/"><img src="{% static 'images/uminn.png' %}"></a>
+            <a target="_blank" href="https://www.nature.com/ncomms/"><img
+                    src="{% static 'images/nature-comm.png' %}"></a>
+        </p>
     </div>
-  </div>
-  
-  <div class="section get-help" id="license" style="text-align: left;padding-bottom: 1em; padding-top: 2em;">
+</div>
+
+<div class="section get-help" id="license" style="text-align: left;padding-bottom: 1em; padding-top: 2em;">
     <div class="container" style="text-align: center;">
-      <a class="button" href="/">Return to the main page</a>
+        <a class="button" href="/">Return to the main page</a>
     </div>
-  </div>
+</div>
 
+<style>
+    @media (max-width: 767px) {
+        .row.team .three.columns img {
+            padding-left: 2em;
+            padding-right: 2em;
+        }
+        .row.team .three.columns {
+            margin-bottom: 2em;
+        }
+    }
+
+</style>
 {% endblock %}

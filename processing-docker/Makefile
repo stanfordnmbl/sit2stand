@@ -6,4 +6,4 @@ push:
 	docker push stanfordnmbl/motionlab-worker
 .PHONY: run
 run:
-	docker run --env-file=.env --gpus all -it stanfordnmbl/motionlab-worker
+	docker run --name sit2stand-worker -p 8000:80 --env-file=.env --gpus all -d stanfordnmbl/motionlab-worker
