@@ -108,6 +108,37 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# LOGS.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '[DJANGO] %(levelname)s %(asctime)s %(module)s '
+                      '%(name)s.%(funcName)s:%(lineno)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'motionlab-log.log',  # Specify the path to the log file
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],  # Add the 'console' handler here
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
 # Max file size.
 # Set FILE_UPLOAD_MAX_MEMORY_SIZE to 1 GB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1 * 1024 * 1024 * 1024  # 51 GB

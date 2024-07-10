@@ -1,10 +1,15 @@
-import pandas as pd
-import numpy as np
 import os
-import json
 import os.path
 from analysis import get_stats
 import traceback
+import urllib.parse
+
+def error_string(ex: Exception) -> str:
+    return urllib.parse.quote('\n'.join([
+        ''.join(traceback.format_exception_only(None, ex)).strip(),
+        ''.join(traceback.format_exception(None, ex, ex.__traceback__)).strip()
+    ]))
+
 
 def run_openpose(path):
 
@@ -18,31 +23,43 @@ def run_openpose(path):
         
         path = "/motionlab/input/input.mp4"
         CMD = "ffmpeg -y -i {} {}".format(path_tmp, path)
-        
-        print(CMD)
+
         os.system(CMD)
 
     os.system('rm /motionlab/output/* -r; mkdir /motionlab/output/plots ; cd /openpose ; /openpose/build/examples/openpose/openpose.bin --video {} --display 0 --write_json /motionlab/output/keypoints -write_video /motionlab/output/output.mp4 ; cd /motionlab'.format(path))
 
+
 def zip_everything():
     os.system("cd /motionlab ; tar -czvf output.tar.gz output ; mv /motionlab/output.tar.gz /motionlab/output/")
 
+
 def predict(path, subjectid = "new"):
-    run_openpose(path)
-
-    stats = {}
     try:
-        stats = get_stats("/motionlab/output/keypoints", subject_id = subjectid)
+        run_openpose(path)
     except Exception as e:
-        print(e)
-        traceback.print_exc()
-        pass
+        print(str(e))
+        print(traceback.format_exc())
+        raise Exception("Error while detecting poses in your video with OpenPose: " + error_string(e))
 
-    zip_everything()
+    try:
+        stats = {}
+        stats = get_stats("/motionlab/output/keypoints", path, subject_id = subjectid)
+    except Exception as e:
+        print(str(e))
+        print(traceback.format_exc())
+        raise Exception("Error while calculating results from extracted poses: " + error_string(e))
+
+    try:
+        zip_everything()
+    except Exception as e:
+        print(str(e))
+        print(traceback.format_exc())
+        raise Exception("Error while zipping results: " + error_string(e))
 
     print(stats)
 
     return stats, open("/motionlab/output/output.tar.gz", "rb")
+
 
 if __name__ == "__main__":
 

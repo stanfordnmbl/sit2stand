@@ -365,6 +365,9 @@ def get_angle_stats(A, B, C, res, breaks, framerate = 30, name = None, alternate
             
         v = (y[1:n] - y[0:(n-1)])*framerate
         a = (v[1:(n-1)] - v[0:(n-2)])*framerate
+
+        if len(v) == 1:
+            a = [0]
         
         diffs.append( np.quantile(y, 0.95) - np.quantile(y, 0.05) )
         sds.append( np.std(y) )
@@ -372,11 +375,15 @@ def get_angle_stats(A, B, C, res, breaks, framerate = 30, name = None, alternate
         vel.append( np.median(v) )
         acc.append( np.median(a) )
 
-        vel_max.append( np.quantile(v, 0.95) )
-        acc_max.append( np.quantile(a, 0.95) )
+        if len(v) > 0:
+            vel_max.append( np.quantile(v, 0.95) )
+        if len(a) > 0:
+            acc_max.append( np.quantile(a, 0.95) )
 
-        vel_min.append( np.quantile(v, 0.05) )
-        acc_min.append( np.quantile(a, 0.05) )
+        if len(v) > 0:
+            vel_min.append( np.quantile(v, 0.05) )
+        if len(a) > 0:
+            acc_min.append( np.quantile(a, 0.05) )
     
     for i in range(len(breaks)-1):
         if (alternate==1) and i % 2 == 1:
@@ -726,10 +733,7 @@ def get_segments(res, magnitude = 1, magnitude_loc = 1, framerate = 30):
     # Remove duplicates
     # downs = downs[np.append(downs[1:] - downs[:-1] > 5,True)]
     # ups = ups[np.append(ups[1:] - ups[:-1] > 5,True)]
-    
-    print(downs)
-    print(ups)
-    
+
     if (len(downs) <= 5 and len(ups) == 5) or (len(downs) <= 4 and len(ups) == 4):
         if max(ups) > max(downs):
             downs = np.append(downs, max(ups) + np.argmin(ind_y_smooth[max(ups):(max(ups) + ups[-1] - ups[-2])]))
@@ -767,10 +771,7 @@ def get_segments(res, magnitude = 1, magnitude_loc = 1, framerate = 30):
            
 #    if downs[-1] > ups[-1]:
 #        downs = downs[:-1]
-        
-    print(downs)
-    print(ups)
-        
+
     scale = framerate
     
     plt.plot(np.array(grid)/scale, knee_angle, linestyle="-", linewidth=2.5)
@@ -871,7 +872,7 @@ def run_openpose(path, slug):
         path_tmp = "/tmp/openpose/tmp{}".format(file_extension)
         os.system("mv \"{}\" {}".format(path, path_tmp))
         
-        path = "/tmp/openpose/input.mp4"
+        path = "/tmp/openpose/input{}".format(file_extension)
         CMD = "rm {path} ; ffmpeg -y -i {path_tmp} {path}".format(path_tmp = path_tmp, path = path)
         
         print(CMD)
@@ -906,8 +907,7 @@ def process_subject(keypoints_arr, framerate = None, subjectid = "new", plots_pa
     md = np.median((res[:,MHIP*3] - (res[:,LKNE*3] + res[:,RKNE*3])/2 ))
     
     orientation = "R" if md < 0 else "L"
-    
-    print(orientation)
+
     if orientation == "L":
         res[:,0::3] = 1 + res[:,0::3].max()-res[:,0::3]
         # TODO: swap left and right
@@ -956,10 +956,8 @@ def process_subject(keypoints_arr, framerate = None, subjectid = "new", plots_pa
     ups, downs = get_segments(res, magnitude=magnitude, framerate = framerate)
     
     if subjectid in realign:
-        print(downs)
         for k,v in realign[subjectid].items():
             downs[k] = v
-        print(downs)
     
     # TODO: assert alternating
     allbreaks = sorted(ups.tolist() + downs.tolist())
@@ -981,7 +979,6 @@ def process_subject(keypoints_arr, framerate = None, subjectid = "new", plots_pa
     lengths = res[ups[1]:ups[-2],3*NOSE:(3*NOSE+2)] - res[ups[1]:ups[-2],3*RANK:(3*RANK+2)]
     lengths = np.sqrt(np.sum(lengths**2, axis=1))
     height = np.quantile(lengths, 0.95)
-    print(height)
     
     for i in range(3*25):
         res[:,i] = smooth_ts(res[:,i], framerate)

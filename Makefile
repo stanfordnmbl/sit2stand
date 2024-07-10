@@ -20,6 +20,6 @@ stop:
 start:
 	docker-compose up -d
         # -v $(pwd)/.env:/code/.env
-	docker run --name motionlab_openpose --link motionlab_redis_1:redis --link motionlab_www_1:www --net motionlab_default -d --shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 stanfordnmbl/motionlab-worker /bin/sh -c 'celery -A worker worker --loglevel=info --concurrency=1 --pool=solo'
+	docker run --name motionlab_openpose --link motionlab_redis_1:redis --link motionlab_www_1:www --net motionlab_default -d --shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 stanfordnmbl/motionlab-worker /bin/sh -c 'celery -A worker worker --loglevel=debug --concurrency=1 --pool=solo'
 
 run: docker stop start

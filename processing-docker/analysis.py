@@ -5,24 +5,31 @@ from scipy.interpolate import interp1d, splrep, splev
     
 from utils import *
 
-def get_stats(keypoints_path, subject_id = "new"):
+def get_stats(keypoints_path, path, subject_id = "new"):
     keypoints = json2np(keypoints_path)
-    
-    CMD = "ffprobe -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate /motionlab/input/input.mp4"
+
+    _, file_extension = os.path.splitext(path)
+    CMD = "ffprobe -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate /motionlab/input/input{}".format(file_extension)
     fps_str = os.popen(CMD).read().strip()
+
     nm,dnm = fps_str.split("/")
     fps = float(nm) / float(dnm)
-    print(fps)
 
     res_dict = process_subject(keypoints, subjectid = subject_id, framerate = fps, plots_path = "/motionlab/output/plots")
-
     nose_y = keypoints[:,[NOSE*3+1,]]
 
     # Smooth the curve for finding a 'better' minimum
     x = range(len(nose_y))
     f = splrep(x, nose_y, s=10**6)
     nose_y_smooth = splev(x, f)
-    _, peaks = peakdet(nose_y_smooth, 50) # save positions of minima
+    _, peaks = peakdet(nose_y_smooth, 10) # save positions of minima
+
+    if len(peaks) == 0:
+        # Smooth the curve for finding a 'better' minimum. This time apply lees smooth factor.
+        x = range(len(nose_y))
+        f = splrep(x, nose_y, s=10 ** 2)
+        nose_y_smooth = splev(x, f)
+        _, peaks = peakdet(nose_y_smooth, 10)  # save positions of minima
 
     n = peaks.shape[0]
 
@@ -54,6 +61,10 @@ def get_stats(keypoints_path, subject_id = "new"):
 
     plt.figure()
     for i in range(len(breaks)-1):
+        num_points = breaks[i + 1] - breaks[i]
+        if num_points <= 3:
+            # Skip this segment if there are not enough points
+            continue
         x = np.linspace(0, 1, num=breaks[i+1] - breaks[i], endpoint=True)
         y = np.pi - lkneeangle[breaks[i]:breaks[i+1]]
         f = splrep(x, y, s=0.03)

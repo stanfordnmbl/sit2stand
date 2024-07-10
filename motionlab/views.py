@@ -17,6 +17,9 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+import re
+import logging
+import urllib.parse
 
 from .forms import ContactForm, ApplicationForm
 
@@ -30,6 +33,15 @@ unit_mapping = {
     "Trunk acceleration": "degrees/s²",
     "Total time": "s"
 }
+
+def remove_uuid_from_filename(file_name):
+    # Regex pattern for UUID
+    uuid_pattern = re.compile(r'-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.')
+
+    # Use regex to find and replace UUID with an empty string
+    file_name_without_uuid = re.sub(uuid_pattern, '.', file_name)
+
+    return file_name_without_uuid
 
 def consistency(x):
     x = float(x)
@@ -72,10 +84,15 @@ def analysis_csv(request, slug):
     # Convert json into csv.
     csv_data = ""
     # Get file name and add it at start.
-    video_name = annotation.video.file.name.replace("inputs/", "").replace(".mp4", "")
+    video_name = remove_uuid_from_filename(annotation.video.file.name.replace("inputs/", ""))
+    # Remove extension.
+    video_name = video_name.split('.')[0]
+
+    # Add to csv.
     csv_data += "filename" + ", " + video_name + "\n"
-    for attribute, value in json_data.items():
-        csv_data += attribute + ", " + str(value) + "\n"
+    if json_data and len(json_data) != 0:
+        for attribute, value in json_data.items():
+            csv_data += attribute + ", " + str(value) + "\n"
 
     # Generate and return response object.
     response = HttpResponse(csv_data, content_type="text/csv")
@@ -88,16 +105,21 @@ def analysis_simple_csv(request, slug):
     annotation = Annotation.objects.get(video__slug=slug)
     # Get data as json.
     json_data = annotation.response
+    print("JSON DATA: " + str(annotation))
     # Convert json into csv.
     csv_data = ""
-    # Get file name and add it at start.
-    video_name = annotation.video.file.name.replace("inputs/", "").replace(".mp4", "")
-    csv_data += "filename" + ", " + video_name + "\n"
+    # Get file name.
+    video_name = remove_uuid_from_filename(annotation.video.file.name.replace("inputs/", ""))
+    # Remove extension.
+    video_name = video_name.split('.')[0]
+
 
     # Add data to csv.
-    csv_data += "Total Time" + ", " + str(((json_data["time"] / json_data["n"]) * 5)) + "\n"
-    csv_data += "Trunk flexion" + ", " + str(json_data["trunk_lean_max"]) + "\n"
-    csv_data += "Trunk acceleration" + ", " + str(json_data["trunk_lean_ang_acc"]) + "\n"
+    if json_data and len(json_data) != 0:
+        csv_data += "filename" + ", " + video_name + "\n"
+        csv_data += "Total Time" + ", " + str(((json_data["time"] / json_data["n"]) * 5)) + "\n"
+        csv_data += "Trunk flexion" + ", " + str(json_data["trunk_lean_max"] - 180) + "\n"
+        csv_data += "Trunk acceleration" + ", " + str(json_data["trunk_lean_max_ang_acc"]) + "\n"
 
     # Generate and return response object.
     response = HttpResponse(csv_data, content_type="text/csv")
@@ -109,7 +131,8 @@ def analysis(request, slug):
     video = Video.objects.get(slug=slug)
 
     # Get video_name.
-    video_name = video.file.name.replace("inputs/", "").replace(".mp4", "")
+    video_name = remove_uuid_from_filename(video.file.name.replace("inputs/", "").replace(".mp4", ""))
+    video_name = video_name.split('.')[0]
 
     example_slug = "0eHy4fTr"
 #    if videos.count()>0:
@@ -129,10 +152,9 @@ def analysis(request, slug):
     if annotations.count() > 0:
         annotation = annotations[0]
 
-    # convert to int
     results = annotation.response
 
-    if results:
+    if results and "error_messsage" not in results:
         # Calculate total time.
         total_time = (results["time"] / results["n"]) * 5
 
@@ -168,6 +190,7 @@ def analysis_multiple(request, slugs):
     annotation_statuses = {}
     results_list = {}
     video_names = []
+    error_messages = {}
 
     for slug in slugs:
         video = Video.objects.get(slug=slug)
@@ -181,16 +204,14 @@ def analysis_multiple(request, slugs):
                 "video_url": video.file.url,
                 "subject_id": video.slug
             }, ))
-
         annotations = video.annotation_set.all()
         annotation = None
         if annotations.count() > 0:
             annotation = annotations[0]
 
-        # convert to int
         results = annotation.response
 
-        if results:
+        if results and "error_messsage" not in results:
             # Calculate total time.
             total_time = (results["time"] / results["n"]) * 5
 
@@ -216,13 +237,15 @@ def analysis_multiple(request, slugs):
         video_file_urls[video.slug] = video.file.url
 
         # Get video_name.
-        video_name = video.file.name.replace("inputs/", "").replace(".mp4", "")
+        video_name = remove_uuid_from_filename(video.file.name.replace("inputs/", ""))
+
         video_names.append(video_name)
 
         if annotation.file:
             annotation_file_urls[video.slug] = annotation.file.url
         else:
             annotation_file_urls[video.slug] = None
+
         annotation_statuses[video.slug] = annotation.status
         results_list[video.slug] = results
 
@@ -234,7 +257,7 @@ def analysis_multiple(request, slugs):
         "video_file_urls": json.dumps(video_file_urls),
         "annotation_file_urls": json.dumps(annotation_file_urls),
         "annotation_statuses": json.dumps(annotation_statuses),
-        "results_list": json.dumps(results_list)
+        "results_list": json.dumps(results_list),
     })
 
 
@@ -437,34 +460,41 @@ def annotation_update(request, id):
 
     filename = "/tmp/{}.tar.gz".format(id)
 
-    with open(filename, 'wb+') as destination:
-        for chunk in request.FILES["file"].chunks():
-            destination.write(chunk)
+    if "file" in request.FILES:
+        with open(filename, 'wb+') as destination:
+                for chunk in request.FILES["file"].chunks():
+                    destination.write(chunk)
 
-    os.system("tar -zxvf {} -C /tmp/".format(filename))
-    
-    ann.file.save("output.mp4", open("/tmp/output/output.mp4","rb"))
-    uploadDirectory("/tmp/output/plots","media/outputs/{}/plots".format(ann.video.slug),"mc-motionlab-storage")
-    uploadDirectory("/tmp/output/keypoints","media/outputs/{}/keypoints".format(ann.video.slug),"mc-motionlab-storage")
+        os.system("tar -zxvf {} -C /tmp/".format(filename))
 
-    s3_client = boto3.client('s3')
-    s3_client.upload_file(filename,
-                          "mc-motionlab-storage",
-                          "media/outputs/{}/output.tar.gz".format(ann.video.slug),
-                          ExtraArgs={
-                              'ContentType': 'application/tar+gzip',
-                              'ACL':'public-read'
-                          })
+        ann.file.save("output.mp4", open("/tmp/output/output.mp4","rb"))
+        uploadDirectory("/tmp/output/plots","media/outputs/{}/plots".format(ann.video.slug),"mc-motionlab-storage")
+        uploadDirectory("/tmp/output/keypoints","media/outputs/{}/keypoints".format(ann.video.slug),"mc-motionlab-storage")
 
-    # Save "/tmp/output/plots" directory to "/media/output/{videoid}/plots"
-        
-    print(request.POST["result"])
-    ann.response = json.loads(request.POST["result"])
-    if len(ann.response.keys()) > 0:
-        ann.status = "done"
-    else:
+        s3_client = boto3.client('s3')
+        s3_client.upload_file(filename,
+                              "mc-motionlab-storage",
+                              "media/outputs/{}/output.tar.gz".format(ann.video.slug),
+                              ExtraArgs={
+                                  'ContentType': 'application/tar+gzip',
+                                  'ACL':'public-read'
+                              })
+
+        # Save "/tmp/output/plots" directory to "/media/output/{videoid}/plots"
+
+    if request.POST.get("status") == "error":
         ann.status = "error"
+        if "error_messsage" in request.POST:
+            ann.response = json.loads('{"error_messsage" : "' + request.POST.get("error_messsage") + '"}')
+    else:
+        ann.status = "done"
+        if request.POST.get("result") != "":
+            ann.response = json.loads(request.POST.get("result"))
+        else:
+            ann.status = "error"
+            ann.response = json.loads('{"error_messsage" : "Results field for annotation is empty."}')
     ann.save()
+
     return HttpResponse("Done")
 
 def contact(request):
