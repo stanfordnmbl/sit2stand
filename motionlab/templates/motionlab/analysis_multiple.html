@@ -4,6 +4,18 @@
 
 {% get_media_prefix as MEDIA_URL %}
 
+<style>
+    .console {
+        background-color: #000;
+        color: #0f0;
+        padding: 10px;
+        font-family: monospace;
+        white-space: pre-wrap; /* Ensures long lines are wrapped */
+        border: 1px solid #444;
+        border-radius: 4px;
+    }
+</style>
+
 <script>
 
 var video_file_urls = JSON.parse("{{ video_file_urls|escapejs }}");
@@ -83,7 +95,15 @@ function handleSelectVideoSlug() {
     textToShow += ` <div class="container">`
     textToShow += `     <h3 class="section-heading">`
     if (annotation_statuses[selectedValue] == "error") {
-	    textToShow += `         Processing finished with an error, we are investigating it.`
+        for (let key in results_list[selectedValue]) {
+            var parts = results_list[selectedValue][key].split(":")
+            textToShow += `<h3 class="section-heading">`
+            textToShow += parts[0]
+            textToShow += `:</h3>`
+            textToShow += `<div class="console">`
+            textToShow += decodeURIComponent(parts[1])
+            textToShow += `</div>`
+        }
 	} else {
 	    textToShow += `         Results`
 	}

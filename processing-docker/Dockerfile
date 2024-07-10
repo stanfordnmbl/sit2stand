@@ -6,4 +6,4 @@ RUN apt install ffmpeg python3-setuptools nginx -y
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 COPY . /motionlab
-CMD nginx ; celery -A worker --pool=solo worker
+CMD nginx; celery -A worker --pool=solo worker --loglevel=debug -E

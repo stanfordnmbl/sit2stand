@@ -9,7 +9,9 @@ import os
 def get_file_path(directory):
     def func(instance, filename):
         ext = filename.split('.')[-1]
-        filename = "%s.%s" % (uuid.uuid4(), ext)
+        name = os.path.basename(filename).split('.')[0]
+        name = name.replace(' ', '_')
+        filename = "%s-%s.%s" % (name, uuid.uuid4(), ext)
         return os.path.join(directory, filename)
     return func
 

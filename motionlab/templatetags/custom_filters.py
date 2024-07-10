@@ -1,5 +1,5 @@
 from django import template
-
+import urllib.parse
 import json
 
 register = template.Library()
@@ -38,3 +38,11 @@ def num_processed(annotation_statuses):
 @register.filter(name='zip')
 def zip_lists(a, b):
     return zip(a, b)
+
+@register.filter
+def split(value, arg):
+    return value.split(arg)
+
+@register.filter
+def unquote_error(value):
+    return urllib.parse.unquote(value)
